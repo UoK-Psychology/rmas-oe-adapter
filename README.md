@@ -7,5 +7,5 @@ It has one responsibility:
 Poll the bus for proposal-created messages, and when one is received, create a new
 OpenEthics application form using the OpenEthics API.
 
-[esb]https://github.com/UoK-Psychology/RMAS-ServiceBus
-[oe]https://github.com/UoK-Psychology/Openethics
+[esb]:https://github.com/UoK-Psychology/RMAS-ServiceBus
+[oe]:https://github.com/UoK-Psychology/Openethics
