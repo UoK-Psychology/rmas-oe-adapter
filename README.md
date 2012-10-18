@@ -67,3 +67,7 @@ This is the example message ([from the RMAS supplier documentation](http://blogs
 	</CERIF>
 </rmas>
 ```
+
+You can push this message to the ESB using the utility module: message_sender.py, but make sure that the ESB is running on localhost at port 7789 first:
+
+```python message_sender.py```
