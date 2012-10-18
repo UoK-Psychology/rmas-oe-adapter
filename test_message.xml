@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <rmas>
-
 	<message-type>Proposal-created</message-type><!-- RMAS message type -->
 	<!-- CERIF payload -->
 	<CERIF
