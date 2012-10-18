@@ -5,17 +5,23 @@ Created on Oct 17, 2012
 '''
 import logging
 from lxml import etree
+from pymongo import Connection
+from pymongo.errors import PyMongoError
 
-def handle_event(event):
+def parse_event(event):
     '''
-        @param event the raw string of the rmas event
+        Parses the event and returns either None, if the event was not a proposal created event
+        or a dictionary containing the key information from the event:
+        {'project_id':'',
+        'project_title':'',
+        'principle_investigator_id':'',
+        'principle_investigator_name':(firstnames, surname)}
     '''
-    logging.info('handling event: %s' % event)
     
     parser = etree.XMLParser(remove_comments=True)
     event_root = etree.fromstring(str(event), parser=parser)
     
-    #check to see if the event is a proposal created event
+    
     event_type = event_root.xpath('/rmas/message-type').pop().text
     
     if event_type.lower() == 'proposal-created':
@@ -40,8 +46,59 @@ def handle_event(event):
         logging.info('''Got details: 
         projectId=%s
         projectTitle=%s
-        principleInvestigator=%s %s
-        '''% (projid,projtitle,pi_first_name, pi_family_name))
-        #call the OpenEthics API with the information retrieved from the payload
+        principleInvestigator=%s %s''' % (projid,projtitle,pi_first_name, pi_family_name))
         
-        #persist a link between the proposal uuid and the application id returned by the api call
+        return {'project_id':projid,
+        'project_title':projtitle,
+        'principle_investigator_id':principle_investigator_person_id,
+        'principle_investigator_name':(pi_first_name, pi_family_name)}
+    
+    return None #wasn't a proposal created event!
+
+def create_ethics_application(title, pi):
+    '''
+        Uses the OpenEthics API to create a new ethics application form
+        
+        @return: the id of the new application, or None if there was a problem
+    '''
+    
+    return None
+
+def persist_proposal_ethics_application_link(proposal_id, ethics_application_id):
+    '''
+        Persists a link between the proposal_id and the newly created ethics_application_id
+        This will be useful if there are any updates.
+    '''
+    try:
+        connection = Connection()
+        database = connection.oe_rmas_adapter
+        link_collection = database.application_links
+        link_collection.insert({'proposal_id':proposal_id, 'ethics_application_id':ethics_application_id})
+    except PyMongoError as e:
+        logging.error('An error occured trying to persist the proposal-ethics-application link: %s' % e)
+
+def handle_event(event):
+    '''
+    
+        Handles the the received RMAs event.
+        
+        in the best case scenario: A proposal-created message is received, it is then parsed and used
+        to create a new ethics application using the OpenEthics API. They newly created ethics application
+        id is then persisted with the proposal id to provide a link between the two entities.
+        
+        @param event the raw string of the rmas event
+    '''
+    logging.info('handling event: %s' % event)
+    
+    
+    event_info = parse_event(event)
+    
+    if event_info:
+        application_id = create_ethics_application(event_info.project_title, event_info.principle_investigator_name)
+        if application_id:
+            persist_proposal_ethics_application_link(event_info.project_id, application_id)
+            
+        
+        
+        
+        
