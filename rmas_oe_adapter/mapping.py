@@ -32,3 +32,20 @@ def get_ethics_user(rmas_id):
         Gets the OpenEthics user id based on the rmas_id supplied. If there is no
         matching user then this function will return None.
     '''
+    
+    try:
+        connection = Connection()
+        database = connection.oe_rmas_adapter
+        link_collection = database.people_links
+        
+        link = link_collection.find_one({'person_id':rmas_id})
+        connection.close()
+        
+        if link:
+            return link['ethics_user_id']
+        
+        
+    except PyMongoError as e:
+        logging.error('Error looking up the ethics id: %s' % e)
+        
+    return None #error or no user found
