@@ -11,7 +11,7 @@ OpenEthics application form using the OpenEthics API.
 [oe]:https://github.com/UoK-Psychology/Openethics
 
 
-This is the example message (from the RMAS supplier documentation) that we are targetting:
+This is the example message ([from the RMAS supplier documentation](http://blogs.kent.ac.uk/rmas-ee/files/2012/10/RMAS-Supplier-Documentation.pdf)) that we are targetting:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?> 
