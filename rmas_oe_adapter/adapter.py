@@ -26,14 +26,22 @@ def handle_event(event):
         projtitle = event_root.xpath('/rmas/p:CERIF/p:cfProj/p:cfTitle/.',
                                       namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
         
-        principle_investigator_person_id = None
-        principle_investigator_person_node = None
+        principle_investigator_person_id = event_root.xpath("/rmas/p:CERIF/p:cfProj/p:cfProj_Pers[p:cfClassId='b0e11470-1cfd-11e1-8bc2-0800200c9a66']/p:cfPersId", 
+                                                      namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
         
+        principle_investigator_person_node = event_root.xpath("/rmas/p:CERIF/p:cfPers[p:cfPersId='%s']" % principle_investigator_person_id, 
+                                                              namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop()
+        
+        pi_first_name = principle_investigator_person_node.xpath('./p:cfPersName/p:cfFirstNames',
+                                      namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
+                                      
+        pi_family_name = principle_investigator_person_node.xpath('./p:cfPersName/p:cfFamilyNames',
+                                      namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
         logging.info('''Got details: 
         projectId=%s
         projectTitle=%s
-        principleInvestigator=%s
-        '''% (projid,projtitle,'unknown'))
+        principleInvestigator=%s %s
+        '''% (projid,projtitle,pi_first_name, pi_family_name))
         #call the OpenEthics API with the information retrieved from the payload
         
         #persist a link between the proposal uuid and the application id returned by the api call
