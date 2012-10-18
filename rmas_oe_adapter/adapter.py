@@ -62,7 +62,7 @@ def create_ethics_application(title, pi):
         @return: the id of the new application, or None if there was a problem
     '''
     
-    return None
+    return 1
 
 def persist_proposal_ethics_application_link(proposal_id, ethics_application_id):
     '''
@@ -73,7 +73,12 @@ def persist_proposal_ethics_application_link(proposal_id, ethics_application_id)
         connection = Connection()
         database = connection.oe_rmas_adapter
         link_collection = database.application_links
-        link_collection.insert({'proposal_id':proposal_id, 'ethics_application_id':ethics_application_id})
+        link = {'proposal_id':proposal_id, 'ethics_application_id':ethics_application_id}
+        link_collection.insert(link)
+        
+        connection.close()
+        logging.info('peristed link %s' % link)
+        
     except PyMongoError as e:
         logging.error('An error occured trying to persist the proposal-ethics-application link: %s' % e)
 
@@ -94,9 +99,9 @@ def handle_event(event):
     event_info = parse_event(event)
     
     if event_info:
-        application_id = create_ethics_application(event_info.project_title, event_info.principle_investigator_name)
+        application_id = create_ethics_application(event_info['project_title'], event_info['principle_investigator_name'])
         if application_id:
-            persist_proposal_ethics_application_link(event_info.project_id, application_id)
+            persist_proposal_ethics_application_link(event_info['project_id'], application_id)
             
         
         
