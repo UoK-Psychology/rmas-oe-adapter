@@ -1,5 +1,6 @@
 '''
-Created on Oct 18, 2012
+This module handlkes the mapping of RMAS entites to OpenEthics entities, and persists them
+to a MongoDB database.
 
 @author: jasonmarshall
 '''
@@ -12,6 +13,9 @@ def persist_proposal_ethics_application_link(proposal_id, ethics_application_id)
     '''
         Persists a link between the proposal_id and the newly created ethics_application_id
         This will be useful if there are any updates.
+        
+        The persistance is carried out using a MongoDB database (oe_rmas_adapter), and the 
+        'application_links' collection
     '''
     try:
         connection = Connection()
@@ -26,12 +30,25 @@ def persist_proposal_ethics_application_link(proposal_id, ethics_application_id)
     except PyMongoError as e:
         logging.error('An error occured trying to persist the proposal-ethics-application link: %s' % e)
 
+def persist_rmas_user_ethics_user_link(rmas_user_id, ethics_user_id):
+    '''
+        This function persists the link between the unique identifier that is used to identify a user
+        in RMAS, to the unique identifier that represents the same user in the OpenEthics system.
+        
+        The persistance is carried out using a MongoDB database (oe_rmas_adapter), and the 'people_links' 
+        collection
+    '''
 
 def get_ethics_user(rmas_id):
     '''
         Gets the OpenEthics user id based on the rmas_id supplied. If there is no
         matching user then this function will return None.
+        
+        The persistance is carried out using a MongoDB database (oe_rmas_adapter), and the 'people_links' 
+        collection
     '''
+    
+    pass #Not yet implemented
     
     try:
         connection = Connection()

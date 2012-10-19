@@ -1,5 +1,8 @@
 '''
-Created on Oct 18, 2012
+This function wraps the functionality of the OpenEthics REST API, presenting a simplified
+interface for accessing its resources.
+
+This module relies on the 'Slumber' package as a REST client.
 
 @author: jasonmarshall
 '''

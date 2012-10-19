@@ -1,5 +1,9 @@
 '''
-Created on Oct 18, 2012
+This module handles the parsing of RMAS messages. It knows how to parse the message/event type
+and depending on the type of message, it knows how to parse its payload.
+
+This is the most changeable module in the package as the specification for these messages has
+yet to be defined.
 
 @author: jasonmarshall
 '''

@@ -1,5 +1,7 @@
 '''
-Created on Oct 17, 2012
+This module provides the functionality to mediate the interaction between the RMAS ESB and the 
+OpenEthics API, it handles messages recieved by the ESB, and depending on the message type, 
+interacts with the OpenEthics API appropriatley.
 
 @author: jasonmarshall
 '''
@@ -9,6 +11,12 @@ from rmas_oe_adapter.mapping import get_ethics_user, persist_proposal_ethics_app
 from rmas_oe_adapter.api import create_ethics_application
 
 def handle_proposal_created(payload):
+    '''
+        This function handles the proposal created event. It will parse the payload
+        to get the information that it needs to then create an OpenEthics application via the 
+        OpenEthics API
+    
+    '''
     logging.info('handling proposal created message!')
     #if so retrieve the key information from the cerif payload:
     
@@ -23,7 +31,7 @@ def handle_proposal_created(payload):
 def handle_event(event):
     '''
     
-        Handles the the received RMAs event.
+        Handles the the received RMAS event.
         
         Currently it only handles proposal-created events.
         
