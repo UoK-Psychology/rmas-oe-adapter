@@ -1,3 +1,10 @@
+'''
+    This module handles the polling of the RMAS ESB, passing any messages that are received from
+    it to the adapter module for processing.
+
+'''
+
+
 from threading import Timer
 from suds.client import Client
 import datetime
