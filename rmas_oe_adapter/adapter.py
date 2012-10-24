@@ -10,6 +10,7 @@ from rmas_oe_adapter.parser import parse_event, parse_proposal_payload
 from rmas_oe_adapter.mapping import get_ethics_user, persist_proposal_ethics_application_link
 from rmas_oe_adapter.api import create_ethics_application
 
+
 def handle_proposal_created(payload):
     '''
         This function handles the proposal created event. It will parse the payload
@@ -44,4 +45,3 @@ def handle_event(event):
     
     if event_type.lower() == 'proposal-created':
         handle_proposal_created(payload)
-        
