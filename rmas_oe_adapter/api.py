@@ -10,71 +10,36 @@ import requests
 import json
 import logging
 
-
-user_endpoint = 'http://127.0.0.1:8000/api/v1/user/'
+API_BASE_URL = 'http://127.0.0.1:8000/'
+user_endpoint = API_BASE_URL+ 'api/v1/user/'
 headers = {'content-type': 'application/json', 'Authorization':'ApiKey admin:1234567890'}
-application_endpoint = 'http://127.0.0.1:8000/api/v1/application/'
+application_endpoint = API_BASE_URL + 'api/v1/application/'
 
-def create_ethics_application(title , **kwargs):
-    '''
-        Uses the OpenEthics API to create a new ethics application form
-        @param the title of the new ethics applicaiton
-        
-        kwargs: One of these must be populated, if both are present then the email will be used.
-        email - the email used to udentify the principle investigator
-        uuid - the RMAS uuid used to identify the princip;e investigator (NOT YET IMPLEMENTED)
-        
-        @return: the id of the new application, or None if there was a problem
-    '''
-    #we need to ge the OpenEthics User Resource for the principle investigator:
-    user_resource = get_user(**kwargs)
-    
-    if user_resource != None:
-        
-        #with a user resource we can now create the new application
-        application_resource = create_application(title, user_resource)
-        
-        if application_resource != None:
-            #we need to return the application_resource uri
-            return application_resource
-        else:
-            logging.error('Unable to create a new application')
-    else:
-        logging.error('Could not find the user resource, unable to create a new application')
-    
-    return None #Uh Oh! a problem must have occured!
 
-def get_user(**kwargs):
+def get_user(user_id):
     '''
     
-        Gets the user resource from OpenEthics, the method of finding the user depends on the 
-        kwargs:
+        Gets the user resource from OpenEthics based on the users uri
         
-        kwargs:
-        
-        email - the email that will be used to identify the user in openEthics
-        uuid - the uuid that will be used to identify the user in openethics (NOT YET IMPLEMENTED)
-        
+        @param user_id: The OpenEthics id for the user
         @return: The user resource, or None if one cannot be found. Note if more than one
         user is found for a given filter then only the first one will be returned.
     '''
-    
-    json_response = None
-    
-    if 'email' in kwargs:
-        logging.info('Getting user based on their email: %s' % kwargs['email'])
-        user_request = requests.get(user_endpoint, params={'email':kwargs['email']}, headers=headers)
-        json_response = user_request.json
-    
-        if json_response and len(json_response['objects']) == 1:
-            
+    user_id = int(user_id)#ids are always integers but we can't guarantee that the id will be received as an int so we should cast to be sure
+    if user_id != None:
+        logging.info('Getting user based on their open ethics id: %s' % user_id)
+        user_request = requests.get(user_endpoint + str(user_id),  headers=headers)
+        
+        if user_request.status_code == 200:     
             #there should only be one resource returned:
-            user = json_response['objects'][0]
+            user = user_request.json
             logging.info('Found OpenEthics User: %s' % user)
             return user
         else:
-            logging.error('Could not get the user from the api call here is the response: %s' % json_response)    
-    
+            logging.error('Could not get the user from the api call returned a status of: %s' % user_request.status_code)    
+    else:
+        logging.error('User id was None when trying to get user resource, looks like this user does not exist in OpenEthics?')
+        
     return None #Uh Oh! a problem must have occured!
 
 def create_application(title, principle_investigator_resource):
@@ -99,13 +64,13 @@ def create_application(title, principle_investigator_resource):
             return new_uri
         else:
             logging.error('Could not create a new ethics application, request status was %s' % new_application_request.status_code)
-    
+    else:
+        logging.error('principle investigator was None or poorly formed when trying to create a new application')
     return None #Uh Oh! a problem must have occured!
     
 if __name__=='__main__':
     logging.basicConfig(level=logging.INFO)
-    new_uri= create_ethics_application('test rmas-oe-adapter application', email='me@home.com')
-    
+    user = get_user(1)
     
     
     

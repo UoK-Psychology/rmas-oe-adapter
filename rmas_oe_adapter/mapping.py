@@ -46,10 +46,7 @@ def get_ethics_user(rmas_id):
         
         The persistance is carried out using a MongoDB database (oe_rmas_adapter), and the 'people_links' 
         collection
-    '''
-    
-    pass #Not yet implemented
-    
+    '''    
     try:
         connection = Connection()
         database = connection.oe_rmas_adapter

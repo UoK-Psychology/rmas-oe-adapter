@@ -7,8 +7,9 @@ interacts with the OpenEthics API appropriatley.
 '''
 import logging
 from rmas_oe_adapter.parser import parse_event, parse_proposal_payload
-from rmas_oe_adapter.mapping import persist_proposal_ethics_application_link
-from rmas_oe_adapter.api import create_ethics_application
+from rmas_oe_adapter.mapping import persist_proposal_ethics_application_link,\
+    get_ethics_user
+from rmas_oe_adapter.api import get_user, create_application
 
 
 def handle_proposal_created(payload):
@@ -23,8 +24,8 @@ def handle_proposal_created(payload):
     
     proposal_details = parse_proposal_payload(payload)
     
-    application_uri = create_ethics_application(proposal_details['project_title'], 
-                                               email=proposal_details['principle_investigator_principle_email'])
+    application_uri = create_application(title=proposal_details['project_title'],
+                                                    principle_investigator_resource=get_user(get_ethics_user(proposal_details['principle_investigator_id'])) )
     if application_uri != None:
         persist_proposal_ethics_application_link(proposal_details['proposal_id'], application_uri)
     
