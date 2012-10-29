@@ -7,7 +7,7 @@ interacts with the OpenEthics API appropriatley.
 '''
 import logging
 from rmas_oe_adapter.parser import parse_event, parse_proposal_payload
-from rmas_oe_adapter.mapping import get_ethics_user, persist_proposal_ethics_application_link
+from rmas_oe_adapter.mapping import persist_proposal_ethics_application_link
 from rmas_oe_adapter.api import create_ethics_application
 
 
@@ -23,18 +23,18 @@ def handle_proposal_created(payload):
     
     proposal_details = parse_proposal_payload(payload)
     
-    ethics_user = get_ethics_user(proposal_details['principle_investigator_id'])
-    
-    if ethics_user:
-        application_id = create_ethics_application(proposal_details['project_title'], ethics_user)
-        persist_proposal_ethics_application_link(proposal_details['proposal_id'], application_id)
+    application_uri = create_ethics_application(proposal_details['project_title'], 
+                                               email=proposal_details['principle_investigator_principle_email'])
+    if application_uri != None:
+        persist_proposal_ethics_application_link(proposal_details['proposal_id'], application_uri)
     
 def handle_event(event):
     '''
     
-        Handles the the received RMAS event.
+        Handles the received RMAS event.
         
-        Currently it only handles proposal-created events.
+        Currently it only handles proposal-created events but in future this would fork out to different
+        event based handler functions
         
         @param event the raw string of the rmas event
     '''
