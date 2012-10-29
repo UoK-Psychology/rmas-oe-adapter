@@ -25,13 +25,14 @@ def get_user(user_id):
         @return: The user resource, or None if one cannot be found. Note if more than one
         user is found for a given filter then only the first one will be returned.
     '''
+    user_id = int(user_id)#ids are always integers but we can't guarantee that the id will be received as an int so we should cast to be sure
     if user_id != None:
         logging.info('Getting user based on their open ethics id: %s' % user_id)
         user_request = requests.get(user_endpoint + str(user_id),  headers=headers)
         
         if user_request.status_code == 200:     
             #there should only be one resource returned:
-            user = user_request.json()
+            user = user_request.json
             logging.info('Found OpenEthics User: %s' % user)
             return user
         else:
@@ -64,7 +65,7 @@ def create_application(title, principle_investigator_resource):
         else:
             logging.error('Could not create a new ethics application, request status was %s' % new_application_request.status_code)
     else:
-        logging.error('principle investigator was None or pporlt formed when trying to create a new application')
+        logging.error('principle investigator was None or poorly formed when trying to create a new application')
     return None #Uh Oh! a problem must have occured!
     
 if __name__=='__main__':
