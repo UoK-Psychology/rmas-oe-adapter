@@ -75,7 +75,7 @@ def parse_proposal_payload(payload):
 
 
 
-def create_ethics_approved_event(rmas_id, start, end):
+def create_ethics_approved_event(rmas_id, start='', end=''):
     '''
         This will create the RMAS-CERIF event message to tell the bus that an ethics application has been
         approved.
