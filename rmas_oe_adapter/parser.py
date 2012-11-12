@@ -95,3 +95,5 @@ def create_ethics_approved_event(rmas_id):
                 sourceDatabase="OpenEthics">
             </CERIF> 
         </rmas>
+        
+'''
