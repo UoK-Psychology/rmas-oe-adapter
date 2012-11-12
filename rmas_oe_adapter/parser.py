@@ -73,16 +73,14 @@ def parse_proposal_payload(payload):
     
     return proposal_details
 
-def _create_ethics_approved_payload(rmas_id):
-    '''
-        This function will create the cerif payload to represent a project that has been approved
-    '''
 
-def create_ethics_approved_event(rmas_id):
+
+def create_ethics_approved_event(rmas_id, start, end):
     '''
         This will create the RMAS-CERIF event message to tell the bus that an ethics application has been
         approved.
     '''
+    
     return '''<?xml version="1.0" encoding="UTF-8"?> 
         <rmas>
             <message-type>ethics-approved</message-type><!-- RMAS message type -->
@@ -93,7 +91,18 @@ def create_ethics_approved_event(rmas_id):
                 release="1.4"
                 date="2012-04-12"
                 sourceDatabase="OpenEthics">
+                
+                <cfProj>
+                    <cfProjId>%s</cfProjId> <!-- RMAS identifier --> 
+                    <cfProj_Class>
+                        
+                        <cfClassId>11111-11111-11111-11111</cfClassId><!-- this is the uuid for the status "Ethics Approved" -->
+                        <cfClassSchemeId>759af93a-34ae-11e1-b86c-0800200c9a66</cfClassSchemeId><!--this is the uuid for the CERIF scheme "Activity Statuses"-->
+                        <cfStartDate>%s</cfStartDate>
+                        <cfEndDate>%s</cfEndDate>
+                    </cfProj_Class>
+                </cfProj>
             </CERIF> 
         </rmas>
         
-'''
+''' % (rmas_id, start, end)
