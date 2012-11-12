@@ -59,3 +59,14 @@ def parse_proposal_payload(payload):
     logging.info('Got details: %s' % proposal_details)
     
     return proposal_details
+
+def _create_ethics_approved_payload(rmas_id):
+    '''
+        This function will create the cerif payload to represent a project that has been approved
+    '''
+
+def create_ethics_approved_event(rmas_id):
+    '''
+        This will create the RMAS-CERIF event message to tell the bus that an ethics application has been
+        approved.
+    '''
