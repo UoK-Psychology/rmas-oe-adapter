@@ -10,6 +10,7 @@ from suds.client import Client
 import datetime
 import logging
 from rmas_oe_adapter.adapter import handle_event
+import lifecycle_consumer
 
 
 last_poll = None
@@ -36,4 +37,5 @@ if __name__=='__main__':
     
     logging.basicConfig(level=logging.INFO)
     last_poll = datetime.datetime.now()
+    lifecycle_consumer.connect()#connect to the message queue to start consuming AMQP messages
     poll_for_events()
