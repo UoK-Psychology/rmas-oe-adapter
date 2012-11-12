@@ -6,7 +6,12 @@ queue.
 '''
 
 import pika
+import logging
 from threading import Thread
+import json
+from rmas_oe_adapter.mapping import get_proposal_ethics_application_link
+from rmas_oe_adapter.rmas_bus import push_event
+from rmas_oe_adapter.parser import create_ethics_approved_event
 
 # Create a global channel variable to hold our channel object in
 channel = None
@@ -50,8 +55,21 @@ def on_queue_bind(*args):
 # Step #7
 def handle_delivery(channel, method, header, body):
     """Called when we receive a message from RabbitMQ"""
-    print body
-
+    
+    
+    event = json.loads(body)
+    
+    if event['event_type'] == 'accepted':
+        
+        logging.info('Received an application approved event')
+        proposal_ethics_application_link = get_proposal_ethics_application_link(ethics_application_id=event['application'])
+        
+        if proposal_ethics_application_link:
+            logging.info('We have got an proposal link so will send a message to the rmas bus')
+            push_event(create_ethics_approved_event(proposal_ethics_application_link))
+        else: 
+            logging.info('No link found for this application, will not tell RMAS')
+            
 
 def connect():
     # Step #1: Connect to RabbitMQ using the default parameters
