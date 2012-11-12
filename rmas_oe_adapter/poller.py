@@ -6,11 +6,12 @@
 
 
 from threading import Timer
-from suds.client import Client
+
 import datetime
 import logging
 from rmas_oe_adapter.adapter import handle_event
 import lifecycle_consumer
+from rmas_oe_adapter.rmas_bus import get_events
 
 
 last_poll = None
@@ -20,10 +21,8 @@ def poll_for_events():
     logging.info('Polling ESB')
     
     global last_poll
+    events = get_events(last_poll.isoformat())
     
-    client = Client('http://localhost:7789/?wsdl', cache=None)
-    events = client.service.getEvents(last_poll.isoformat())
-
     if hasattr(events, 'string'):
         for event in events.string:
             handle_event(event)
