@@ -17,4 +17,5 @@ def push_event(event):
     '''
         Pushes the event to the RMAS bus.
     '''
-    pass
+    client = Client('http://localhost:7789/?wsdl', cache=None)
+    return client.service.pushEvent(event)
