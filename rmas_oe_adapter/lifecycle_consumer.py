@@ -32,19 +32,22 @@ def on_queue_declared(frame):
         be declared but just in case we will declare it anyway.
     """
     channel.exchange_declare(callback=on_exchange_declared, exchange='openethics_events', exchange_type='fanout')
-    
+
+# Step #5  
 def on_exchange_declared(*args):
     '''
         Now that we have a queue and an exchange declared we can bind the two together
     '''
     channel.queue_bind(on_queue_bind, queue='adapter', exchange='openethics_events', routing_key='')
 
+# Step #6
 def on_queue_bind(*args):
     '''
         Called once we have found our queue to the exchange
     '''
     channel.basic_consume(handle_delivery, queue='adapter')
-# Step #5
+
+# Step #7
 def handle_delivery(channel, method, header, body):
     """Called when we receive a message from RabbitMQ"""
     print body
