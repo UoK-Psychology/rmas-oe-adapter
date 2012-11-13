@@ -37,7 +37,7 @@ def parse_event(event):
     event_root = etree.fromstring(str(event), parser=parser)
     
     event_type = event_root.xpath('/rmas/message-type').pop().text
-    payload = _process_single_element_xpath(event_root, '/rmas/message-type')
+    payload = _process_single_element_xpath(event_root, '/rmas/p:CERIF')
     
     return (event_type, payload)
 
@@ -54,21 +54,30 @@ def parse_proposal_payload(payload):
         'principle_investigator_principle_email':''}
         
     '''
+    parsed_data={'projid':None,
+    'projtitle':None,
+    'principle_investigator_person_id':None}
     
-    projid = payload.xpath('p:cfProj/p:cfProjId', 
-                              namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
-    projtitle = payload.xpath('p:cfProj/p:cfTitle',
-                                  namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
+    parseing_info= [('projid', 'p:cfProj/p:cfProjId'),
+                    ('projtitle', 'p:cfProj/p:cfTitle' ),
+                    ('principle_investigator_person_id', "p:cfProj/p:cfProj_Pers[p:cfClassId='b0e11470-1cfd-11e1-8bc2-0800200c9a66']/p:cfPersId")
+                    ]
     
-    principle_investigator_person_id = payload.xpath("p:cfProj/p:cfProj_Pers[p:cfClassId='b0e11470-1cfd-11e1-8bc2-0800200c9a66']/p:cfPersId", 
-                                                  namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}).pop().text
-    
+    for info in parseing_info:
+        
+        element = _process_single_element_xpath(payload, info[1])
+        
+        if element == None:
+            raise AttributeError('Got no result for xpath: %s' % info[1])
+        
+        parsed_data[info[0]] = element.text #assign the text contrents of the element to the var 
+        
     
     
     proposal_details = {
-                        'proposal_id':projid,
-                        'project_title':projtitle,
-                        'principle_investigator_id':principle_investigator_person_id,
+                        'proposal_id':parsed_data['projid'],
+                        'project_title':parsed_data['projtitle'],
+                        'principle_investigator_id':parsed_data['principle_investigator_person_id'],
                         }
     
     logging.info('Got details: %s' % proposal_details)
