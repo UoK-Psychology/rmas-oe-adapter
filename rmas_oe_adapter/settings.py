@@ -1,4 +1,5 @@
 import os
+import pika
 
 basepath = os.path.dirname(globals()["__file__"])
 dirname = os.path.abspath(os.path.join(basepath, ".."))
@@ -15,3 +16,10 @@ OE_API_USER_ENDPOINT = OE_API_BASE_URL+ 'api/v1/user/'
 OE_API_APPLICATION_ENDPOINT = OE_API_BASE_URL + 'api/v1/application/'
 
 RMAS_BUS_WSDL= 'http://localhost:7789/?wsdl'
+
+
+AMQP_CONNECTION_PARAMETERS= pika.ConnectionParameters()
+AMQP_EXCHANGE_NAME='openethics_events'
+AMQP_EXCHANGE_TYPE='fanout'
+AMQP_QUEUE_NAME='adapter'
+AMQP_QUEUE_ROUTING_KEY=''
