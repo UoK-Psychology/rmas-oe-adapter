@@ -12,6 +12,7 @@ import json
 from rmas_oe_adapter.mapping import get_proposal_ethics_application_link
 from rmas_oe_adapter.rmas_bus import push_event
 from rmas_oe_adapter.parser import create_ethics_approved_event
+from rmas_oe_adapter import settings
 
 # Create a global channel variable to hold our channel object in
 channel = None
@@ -28,7 +29,11 @@ def on_channel_open(new_channel):
     """Called when our channel has opened"""
     global channel
     channel = new_channel
-    channel.queue_declare(queue="adapter", durable=True, exclusive=False, auto_delete=True, callback=on_queue_declared)
+    channel.queue_declare(queue=settings.AMQP_QUEUE_NAME, 
+                          durable=True, 
+                          exclusive=False, 
+                          auto_delete=True, 
+                          callback=on_queue_declared)
 
 # Step #4
 def on_queue_declared(frame):
@@ -36,14 +41,18 @@ def on_queue_declared(frame):
         We now need to make sure that there is an exchange registered, it is very likely that it will already
         be declared but just in case we will declare it anyway.
     """
-    channel.exchange_declare(callback=on_exchange_declared, exchange='openethics_events', exchange_type='fanout')
+    channel.exchange_declare(callback=on_exchange_declared, 
+                             exchange=settings.AMQP_EXCHANGE_NAME, 
+                             exchange_type=settings.AMQP_EXCHANGE_TYPE)
 
 # Step #5  
 def on_exchange_declared(*args):
     '''
         Now that we have a queue and an exchange declared we can bind the two together
     '''
-    channel.queue_bind(on_queue_bind, queue='adapter', exchange='openethics_events', routing_key='')
+    channel.queue_bind(on_queue_bind, queue=settings.AMQP_QUEUE_NAME, 
+                       exchange=settings.AMQP_EXCHANGE_NAME, 
+                       routing_key=settings.AMQP_QUEUE_ROUTING_KEY)
 
 # Step #6
 def on_queue_bind(*args):
@@ -73,8 +82,8 @@ def handle_delivery(channel, method, header, body):
 
 def connect():
     # Step #1: Connect to RabbitMQ using the default parameters
-    parameters = pika.ConnectionParameters()
-    connection = pika.SelectConnection(parameters, on_connected)
+    
+    connection = pika.SelectConnection(settings.AMQP_CONNECTION_PARAMETERS, on_connected)
     
 
     # Loop so we can communicate with RabbitMQ
