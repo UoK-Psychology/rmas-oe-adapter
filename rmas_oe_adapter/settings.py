@@ -13,3 +13,5 @@ OE_API_AUTH_KEY = 'ApiKey admin:1234567890'
 
 OE_API_USER_ENDPOINT = OE_API_BASE_URL+ 'api/v1/user/'
 OE_API_APPLICATION_ENDPOINT = OE_API_BASE_URL + 'api/v1/application/'
+
+RMAS_BUS_WSDL= 'http://localhost:7789/?wsdl'
