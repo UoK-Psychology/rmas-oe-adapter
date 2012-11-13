@@ -10,6 +10,8 @@ yet to be defined.
 
 from lxml import etree
 import logging
+import os
+import settings
 
 def _process_single_element_xpath(root, xpath_expression, namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}):
     '''
@@ -75,34 +77,14 @@ def parse_proposal_payload(payload):
 
 
 
-def create_ethics_approved_event(rmas_id, start='', end=''):
+def create_ethics_approved_event(rmas_id, start='', end='', template=os.path.abspath(os.path.join(settings.TEMPLATE_DIR,'ethics_approved.xml'))):
     '''
         This will create the RMAS-CERIF event message to tell the bus that an ethics application has been
         approved.
     '''
     
-    return '''<?xml version="1.0" encoding="UTF-8"?> 
-        <rmas>
-            <message-type>ethics-approved</message-type><!-- RMAS message type -->
-            <CERIF
-                xmlns="urn:xmlns:org:eurocris:cerif-1.4-0" 
-                xsi:schemaLocation="urn:xmlns:org:eurocris:cerif-1.4-0http://www.eurocris.org/Uploads/Web%20pages/CERIF-1.4/CERIF_1.4_0.xsd" 
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                release="1.4"
-                date="2012-04-12"
-                sourceDatabase="OpenEthics">
-                
-                <cfProj>
-                    <cfProjId>%s</cfProjId> <!-- RMAS identifier --> 
-                    <cfProj_Class>
-                        
-                        <cfClassId>11111-11111-11111-11111</cfClassId><!-- this is the uuid for the status "Ethics Approved" -->
-                        <cfClassSchemeId>759af93a-34ae-11e1-b86c-0800200c9a66</cfClassSchemeId><!--this is the uuid for the CERIF scheme "Activity Statuses"-->
-                        <cfStartDate>%s</cfStartDate>
-                        <cfEndDate>%s</cfEndDate>
-                    </cfProj_Class>
-                </cfProj>
-            </CERIF> 
-        </rmas>
-        
-''' % (rmas_id, start, end)
+    with open(template) as template_file:
+        event_message=template_file.read() % {'rmas_id':rmas_id, 'start':start, 'end':end}
+    
+    
+    return event_message
