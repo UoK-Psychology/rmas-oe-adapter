@@ -9,11 +9,11 @@ This module relies on the 'Requests' package as a REST client.
 import requests
 import json
 import logging
+from rmas_oe_adapter import settings
 
-API_BASE_URL = 'http://127.0.0.1:8000/'
-user_endpoint = API_BASE_URL+ 'api/v1/user/'
-headers = {'content-type': 'application/json', 'Authorization':'ApiKey admin:1234567890'}
-application_endpoint = API_BASE_URL + 'api/v1/application/'
+
+headers = {'content-type': 'application/json', 'Authorization':settings.OE_API_AUTH_KEY}
+
 
 
 def get_user(user_id):
@@ -28,7 +28,7 @@ def get_user(user_id):
     user_id = int(user_id)#ids are always integers but we can't guarantee that the id will be received as an int so we should cast to be sure
     if user_id != None:
         logging.info('Getting user based on their open ethics id: %s' % user_id)
-        user_request = requests.get(user_endpoint + str(user_id),  headers=headers)
+        user_request = requests.get(settings.OE_API_USER_ENDPOINT + str(user_id),  headers=headers)
         
         if user_request.status_code == 200:     
             #there should only be one resource returned:
@@ -56,7 +56,7 @@ def create_application(title, principle_investigator_resource):
     if principle_investigator_resource != None and 'resource_uri' in principle_investigator_resource:
         data = json.dumps({'principle_investigator':principle_investigator_resource['resource_uri'], 'title':title})
             
-        new_application_request = requests.post(application_endpoint, data=data, headers=headers)
+        new_application_request = requests.post(settings.OE_API_APPLICATION_ENDPOINT, data=data, headers=headers)
         
         if new_application_request.status_code == 201:
             new_uri =new_application_request.headers['location']
