@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <rmas>
-	<message-type>Proposal-created</message-type><!-- RMAS message type -->
+	<message-type>proposal-created</message-type><!-- RMAS message type -->
 	<!-- CERIF payload -->
 	<CERIF
 		xmlns="urn:xmlns:org:eurocris:cerif-1.4-0" 
@@ -27,7 +27,7 @@
 			</cfProj_OrgUnit>
 		
 			<cfProj_Pers><!-- Link entity (denoting project principal investigator -->
-				<cfPersId>pers-simon-foster-internal-id</cfPersId>
+				<cfPersId>1123456</cfPersId>
 				<cfClassId>b0e11470-1cfd-11e1-8bc2-0800200c9a66</cfClassId><!-- Formal euroCRIS UUID for 'Principal Investigator' --> 
 				<cfClassSchemeId>94fefd50-1d00-11e1-8bc2-0800200c9a66</cfClassSchemeId> <!-- Formal euroCRIS UUID for 'CERIF1.3-Project-Person' --> 
 				<cfStartDate>2010-01-01T00:00:00</cfStartDate> <!-- Project start --> 
@@ -41,7 +41,7 @@
 		</cfOrgUnit>
 	
 		<cfPers> <!-- Referenced person entity -->
-			<cfPersId>pers-simon-foster-internal-id</cfPersId> 
+			<cfPersId>1123456</cfPersId> 
 			<cfGender>m</cfGender>
 			<cfPersName>
 				<cfFamilyNames>Foster</cfFamilyNames>
