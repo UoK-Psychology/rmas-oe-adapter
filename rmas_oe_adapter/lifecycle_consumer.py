@@ -12,6 +12,7 @@ import json
 from rmas_oe_adapter.mapping import get_proposal_ethics_application_link
 from rmas_adapter.core.rmas_bus import RMASBus
 from rmas_oe_adapter import settings
+from rmas_oe_adapter.api import build_application_uri
 
 
 def create_ethics_approved_event(rmas_id, start='', end='', template=os.path.abspath(os.path.join(settings.TEMPLATE_DIR,'ethics_approved.xml'))):
@@ -81,13 +82,14 @@ def handle_delivery(channel, method, header, body):
     
     if event['event_type'] == 'accepted':
         
-        logging.info('Received an application approved event')
-        proposal_ethics_application_link = get_proposal_ethics_application_link(ethics_application_id=event['application'])
+        logging.info('Received an application approved event %s' % event['application'])
+        application_uri = build_application_uri(event['application'])
+        proposal_ethics_application_link = get_proposal_ethics_application_link(ethics_application_id=application_uri)
         
         if proposal_ethics_application_link:
             bus = RMASBus()
             logging.info('We have got an proposal link so will send a message to the rmas bus')
-            bus.push_event(create_ethics_approved_event(proposal_ethics_application_link))
+            bus.push_event(create_ethics_approved_event(proposal_ethics_application_link['proposal_id']))
         else: 
             logging.info('No link found for this application, will not tell RMAS')
             
