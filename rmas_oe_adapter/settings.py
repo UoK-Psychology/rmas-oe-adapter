@@ -6,7 +6,7 @@ dirname = os.path.abspath(os.path.join(basepath, ".."))
 
 RMAS_BUS_WSDL='http://localhost:7789/?wsdl'
 POLL_INTERVAL=5000
-EVENTS=[('proposal-created', 'proposal_created'),]
+EVENTS=[('proposal-created', 'handlers.proposal_created'),]
 
 
 TEMPLATE_DIR=os.path.abspath(os.path.join(dirname,'templates'))
