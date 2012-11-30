@@ -10,10 +10,21 @@ import logging
 from threading import Thread
 import json
 from rmas_oe_adapter.mapping import get_proposal_ethics_application_link
-from rmas_oe_adapter.rmas_bus import push_event
-from rmas_oe_adapter.parser import create_ethics_approved_event
+from rmas_adapter.core.rmas_bus import push_event
 from rmas_oe_adapter import settings
 
+
+def create_ethics_approved_event(rmas_id, start='', end='', template=os.path.abspath(os.path.join(settings.TEMPLATE_DIR,'ethics_approved.xml'))):
+    '''
+        This will create the RMAS-CERIF event message to tell the bus that an ethics application has been
+        approved.
+    '''
+    
+    with open(template) as template_file:
+        event_message=template_file.read() % {'rmas_id':rmas_id, 'start':start, 'end':end}
+    
+    
+    return event_message
 # Create a global channel variable to hold our channel object in
 channel = None
 connection = None
