@@ -9,7 +9,7 @@ This module relies on the 'Requests' package as a REST client.
 import requests
 import json
 import logging
-from rmas_oe_adapter import settings
+from rmas_adapter.conf import settings
 
 
 headers = {'content-type': 'application/json', 'Authorization':settings.OE_API_AUTH_KEY}
