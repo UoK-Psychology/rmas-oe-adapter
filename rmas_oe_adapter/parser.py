@@ -1,45 +1,11 @@
 '''
-This module handles the parsing of RMAS messages. It knows how to parse the message/event type
-and depending on the type of message, it knows how to parse its payload.
 
-This is the most changeable module in the package as the specification for these messages has
-yet to be defined.
-
-@author: jasonmarshall
 '''
 
 from lxml import etree
 import logging
 import os
-import settings
-
-def _process_single_element_xpath(root, xpath_expression, namespaces={'p':'urn:xmlns:org:eurocris:cerif-1.4-0'}):
-    '''
-        This function should be used to process an xpath that you believe will only
-        return one element (or you only want the first element of those returned)
-    '''
-    
-    expression_result = root.xpath(xpath_expression, namespaces=namespaces)
-    
-    result = None
-    if len(expression_result) > 0:
-        result = expression_result.pop() 
-    
-    return result
-    
-def parse_event(event):
-    '''
-        Parses the event and returns a tuple, the first element being the
-        event type, and the second element being the cerif payload of the message
-    '''
-    
-    parser = etree.XMLParser(remove_comments=True)
-    event_root = etree.fromstring(str(event), parser=parser)
-    
-    event_type = event_root.xpath('/rmas/message-type').pop().text
-    payload = _process_single_element_xpath(event_root, '/rmas/message-type')
-    
-    return (event_type, payload)
+from rmas_adapter.conf import settings
 
 
 def parse_proposal_payload(payload):
