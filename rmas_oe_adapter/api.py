@@ -14,7 +14,11 @@ from rmas_adapter.conf import settings
 
 headers = {'content-type': 'application/json', 'Authorization':settings.OE_API_AUTH_KEY}
 
-
+def build_application_uri(application_id):
+    '''
+        Builds the uri for an application based on its uri.
+    '''
+    return settings.OE_API_APPLICATION_ENDPOINT + str(application_id) +'/'
 
 def get_user(user_id):
     '''
