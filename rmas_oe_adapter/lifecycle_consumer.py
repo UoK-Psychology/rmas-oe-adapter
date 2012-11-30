@@ -4,13 +4,13 @@ queue.
 
 @author: jasonmarshall
 '''
-
+import os
 import pika
 import logging
 from threading import Thread
 import json
 from rmas_oe_adapter.mapping import get_proposal_ethics_application_link
-from rmas_adapter.core.rmas_bus import push_event
+from rmas_adapter.core.rmas_bus import RMASBus
 from rmas_oe_adapter import settings
 
 
@@ -85,8 +85,9 @@ def handle_delivery(channel, method, header, body):
         proposal_ethics_application_link = get_proposal_ethics_application_link(ethics_application_id=event['application'])
         
         if proposal_ethics_application_link:
+            bus = RMASBus()
             logging.info('We have got an proposal link so will send a message to the rmas bus')
-            push_event(create_ethics_approved_event(proposal_ethics_application_link))
+            bus.push_event(create_ethics_approved_event(proposal_ethics_application_link))
         else: 
             logging.info('No link found for this application, will not tell RMAS')
             
