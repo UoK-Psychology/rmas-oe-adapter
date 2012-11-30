@@ -4,7 +4,7 @@ Created on Nov 13, 2012
 @author: jasonmarshall
 '''
 from unittest2.case import TestCase
-from rmas_oe_adapter.parser import create_ethics_approved_event
+from rmas_oe_adapter.lifecycle_consumer import create_ethics_approved_event
 
 
 class CreateEthicsApprovalEventTests(TestCase):
