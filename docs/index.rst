@@ -11,13 +11,10 @@ Contents:
 
 
 .. toctree::
-   :maxdepth: 2
+	:maxdepth: 1
    
-   
-.. automodule:: rmas_oe_adapter.runner
-	:members:
-
-
+	pkgsetup
+	codedocs
 
 Indices and tables
 ==================
