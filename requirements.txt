@@ -1,3 +1,4 @@
 pymongo==2.3
 requests==0.14.1
-RMASAdapter
+pika==0.9.8
+RMASAdapter==0.1.0
