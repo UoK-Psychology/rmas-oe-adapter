@@ -12,6 +12,7 @@ In order for the adapter to work there are two sub-systems that it relies on:
 
 * AMQP Server : We have tested this using RabbitMQ, but in theory you could use any AMQP server (ymmv)
 * RMAS Service bus : We are using our own RMAS Service bus - https://github.com/UoK-Psychology/RMAS-ServiceBus
+* MongoDb server : This is used to persist links between users, and applications.
 
 By using pip to install the software, it will install the pre-requisites and put a script
 in you path that will allow you to run the adapter:::

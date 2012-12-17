@@ -26,7 +26,7 @@ This is the loop that is intitiated by a proposal-created message, and causes a 
 to be created in OpenEthics, and is comprised of several steps:
 
 1. The proposal-created message is received during a routine poll of the RMAS-Bus.
-2. This causes the adapter to use the OpenEthics API to create a new Ethics Application, this uses the proposal title as the tile for the ethics application and, uses the principle investigator identified in the proposal as the pi for the ethics application. (There is a little more to it than that to read more go here)
+2. This causes the adapter to use the OpenEthics API to create a new Ethics Application, this uses the proposal title as the tile for the ethics application and, uses the principle investigator identified in the proposal as the pi for the ethics application. (There is a little more to it than that to read more see: :doc:`usersync` )
 3. OpenEthics Sends back the identifier for the new OpenEthics application.
 4. The adapter persists a link between the RMAS identifier for the proposal and the OpenEthics ID  (this is for use in the approval loop).
 
@@ -49,4 +49,5 @@ Additional Documentation
    
 	pkgsetup
 	codedocs
+	usersync
 
