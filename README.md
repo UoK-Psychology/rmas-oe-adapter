@@ -1,5 +1,7 @@
 ##rmas-oe-adapter##
 
+Full documentation is available here: https://rmas-to-openethics-adapter.readthedocs.org/en/latest/
+
 This adapter will sit between the [RMAS communication bus] [esb], and the [OpenEthics] [oe] API.
 
 It has one responsibility:
