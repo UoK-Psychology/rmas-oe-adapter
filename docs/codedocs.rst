@@ -24,4 +24,8 @@ mapping.py
 .. automodule:: rmas_oe_adapter.mapping
 	:members:
 	
+handlers.proposal_create.py
+-----------------------------
+.. automodule:: rmas_oe_adapter.handlers.proposal_created
+	:members:
 

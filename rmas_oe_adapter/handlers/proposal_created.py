@@ -40,6 +40,13 @@ def parse_proposal_payload(payload):
     return proposal_details
 
 def handle_event(payload):
+    '''
+        Called by the RMAS Adapter framework to handle a proposal-created message.
+        
+        This function will attempt to create an OpenEthics application based on the title
+        and the principle investigator of the proposal.
+    
+    '''
     logging.info('handling proposal created message!')
     #if so retrieve the key information from the cerif payload:
     
