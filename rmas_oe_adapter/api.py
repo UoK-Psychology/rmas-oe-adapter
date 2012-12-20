@@ -11,8 +11,10 @@ import json
 import logging
 from rmas_adapter.conf import settings
 
-
-headers = {'content-type': 'application/json', 'Authorization':settings.OE_API_AUTH_KEY}
+try:
+    headers = {'content-type': 'application/json', 'Authorization':settings.OE_API_AUTH_KEY}
+except:
+    logging.error('Unable to get the OE_API_AUTH_KEY from the settings module, your api calls will most likely not work!!')
 
 def build_application_uri(application_id):
     '''
