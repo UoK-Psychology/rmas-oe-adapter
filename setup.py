@@ -16,7 +16,7 @@ setup(
     install_requires=[
         "pymongo == 2.3",
         "requests == 0.14.1",
-        "RMASAdapter == 0.1.3 ",
+        "RMASAdapter == 0.1.4 ",
         "pika==0.9.8",
     ],
 )
